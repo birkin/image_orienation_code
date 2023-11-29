@@ -1,5 +1,7 @@
 import cv2
 import numpy as np
+import argparse
+
 
 def compare_image_orientation(path_a, path_b):
     # Load images
@@ -7,7 +9,7 @@ def compare_image_orientation(path_a, path_b):
     img2 = cv2.imread(path_b, cv2.IMREAD_GRAYSCALE)
 
     # Initialize ORB detector
-    orb = cv2.ORB_create()
+    orb = cv2.ORB_create()  # type: ignore
 
     # Find keypoints and descriptors with ORB
     kp1, des1 = orb.detectAndCompute(img1, None)
@@ -32,6 +34,12 @@ def compare_image_orientation(path_a, path_b):
     else:
         return 'Not enough matches to determine'
 
-# Example usage
-# result = compare_image_orientation('path_to_image_A.jpg', 'path_to_image_B.jpg')
-# print(result)
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Compare the orientation of two images.')
+    parser.add_argument('--path_a', type=str, help='Path to the first image')
+    parser.add_argument('--path_b', type=str, help='Path to the second image')
+
+    args = parser.parse_args()
+
+    result = compare_image_orientation(args.path_a, args.path_b)
+    print(result)
